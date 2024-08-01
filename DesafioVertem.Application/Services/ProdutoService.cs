@@ -29,7 +29,6 @@ namespace DesafioVertem.Application.Services
                 DataDeCriacao = produtos.DataDeCriacao,
                 StatusResponse = 200,
                 StatusDescricao = "Lista de produtos"
-
             }).ToList();
         }
 
@@ -67,19 +66,6 @@ namespace DesafioVertem.Application.Services
             };
 
             var createdProduto = await _produtoRepository.CreateProdutoAsync(produto);
-            if (produto == null)
-            {
-                return new ProdutoDTOResponse
-                {
-                    Id = produto.Id,
-                    Nome = produto.Nome,
-                    Descricao = produto.Descricao,
-                    Preco = produto.Preco,
-                    DataDeCriacao = produto.DataDeCriacao,
-                    StatusResponse = 400,
-                    StatusDescricao = "Não foi possivel criar o produto"
-                };
-            }
 
             return new ProdutoDTOResponse
             {
@@ -112,20 +98,7 @@ namespace DesafioVertem.Application.Services
             };
 
             var updateProduto = await _produtoRepository.UpdateProdutoAsync(produto);
-            if (updateProduto == null)
-            {
-                return new ProdutoDTOResponse
-                {
-                    Id = updateProduto.Id,
-                    Nome = updateProduto.Nome,
-                    Descricao = updateProduto.Descricao,
-                    Preco = updateProduto.Preco,
-                    DataDeCriacao = updateProduto.DataDeCriacao,
-                    StatusResponse = 400,
-                    StatusDescricao = "Não foi possivel alterar o produto"
-                };
-            }
-
+           
             return new ProdutoDTOResponse
             {
                 Id = updateProduto.Id,
@@ -133,8 +106,8 @@ namespace DesafioVertem.Application.Services
                 Descricao = updateProduto.Descricao,
                 Preco = updateProduto.Preco,
                 DataDeCriacao = updateProduto.DataDeCriacao,
-                StatusResponse = 200,
-                StatusDescricao = "Produto alterado com sucesso!"
+                StatusResponse = updateProduto != null ? 200 : 400,
+                StatusDescricao = updateProduto != null ? "Produto alterado com sucesso!" : "Não foi possivel alterar o produto"
             };
         }
         public async Task<bool> DeleteProdutoAsync(int id)
